@@ -1,0 +1,24 @@
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:80"
+      - "443:443"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./certs/selfsigned.crt:/etc/ssl/selfsigned.crt
+      - ./certs/selfsigned.key:/etc/ssl/selfsigned.key
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./frontend/build:/usr/share/nginx/html
+
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build: ./frontend
+    stdin_open: true
+
